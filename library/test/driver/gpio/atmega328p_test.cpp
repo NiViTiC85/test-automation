@@ -86,15 +86,20 @@ constexpr void simulateToggle(GpioRegs& regs) noexcept
 void runOutputTest(const std::uint8_t id, GpioRegs& regs) noexcept
 {
     // Get the physical pin on the given port.
+    // Example: const std::uint8_t pin{getPhysicalPin(id)};
 
     // Limit the scope of the GPIO instance.
     {
         // Create a new GPIO output.
+
         // Expect the instance to be initialized correctly if the pin is valid.
         
         // Expect the GPIO to be set as output, i.e., the corresponding bit in DDRx should be set.
+        // Tips: Check that the pin is set with EXPECT_TRUE() and utils::read(regs.ddrx, pin).
 
         // Set the output high, expect the corresponding bit in PORTx to be set.
+        // Tips: Use gpio.write() to set the output, read the bit with 
+        // utils::read(regs.portx, pin);
 
         // Set the output low, expect the corresponding bit in PORTx to be cleared.
 
@@ -138,11 +143,16 @@ TEST(Gpio_Atmega328p, Initialization)
 {
     constexpr std::uint8_t pinMax{50U};
 
-    // Systematically test GPIO initilization across a range of pin numbers.
+    // Systematically test GPIO initialization across a range of pin numbers.
     for (std::uint8_t pin{}; pin < pinMax; ++pin)
     {
         // Create a new GPIO instance with the current pin number.
+        // Example: gpio::Atmega328p gpio{pin, gpio::Direction::Output};
+
         // Expect the instance to be initialized correctly if the pin is valid.
+        // Tips: Check if the instance is initialized by invoking gpio.isInitialized().
+        //       Check if the pin is valid by invoking isPinValid(pin).
+        //       Use EXPECT_TRUE(), EXPECT_FALSE, and/or EXPECT_EQ to validate the functionality.
 
         // Create another GPIO instance on the same pin.
         // Expect the instance to not be initialized, since the pin is already reserved.
