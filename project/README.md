@@ -220,26 +220,31 @@ Vissa tester kan inte automatiseras fullt ut på grund av hårdvaruberoenden. De
 
 #### Semi-automatiserade tester: Python-baserad seriell kommunikation (VG-nivå)
 
+**OBS!** Se [L09 - SW/HW-integrationstestning (del II)](../lectures/L09/README.md) för detaljerad implementation och exempel.
+
 För att underlätta testning av seriell kommunikation och programflöde på verklig hårdvara ska ni skapa ett **Python-skript** som:
 
-1. **Läser och skriver data via den seriella porten**:
+1. **Använder rätt arkitektur**:
+   * Skapa en `uart/`-katalog med `Interface`, `Driver`, `Stub` och `Factory`-klasser enligt strukturen från [L09](../lectures/L09/README.md).
+   * Använd Factory-pattern för att välja mellan `Driver `(Windows) och `Stub` (Linux/Mac).
+
+2. **Läser och skriver data via den seriella porten**:
    * Tar emot och skriver ut data som mikrokontrollern skickar via UART.
-   * Formaterar utskriften på ett läsbart sätt (t.ex. timestamps, färgkodning).
+   * Formaterar utskriften på ett läsbart sätt (exempelvis via timestamps och färgkodning).
    * Loggar all kommunikation till en fil för senare analys.
 
-2. **Styr programflödet**:
+3. **Styr programflödet**:
    * Skickar kommandosträngar till mikrokontrollern för att styra dess beteende.
    * Möjliggör interaktiv eller scriptad kontroll av systemet.
-   * Verifierar korrekta svar från mikrokontrollern.
 
-**Testfall med Python-skript**:
-* **Temperaturloggning**: Låt enheten skicka temperaturdata kontinuerligt, verifiera format och värden.
-* **Kommandosvar**: Skicka kommandon (t.ex. "GET_TEMP", "TOGGLE_LED") och verifiera att enheten svarar korrekt.
-* **Stresstest**: Skicka många kommandon snabbt efter varandra för att testa bufferhantering.
-* **Felhantering**: Skicka ogiltiga kommandon och verifiera att enheten hanterar dem korrekt.
+**Testfall att implementera** (se L09 för detaljer):
+* Toggle-funktionalitet via kommandot `t`.
+* Status-avläsning via kommandot `s`.
+* Temperaturavläsning via kommandot `r`.
+* Felhantering vid ogiltiga kommandon.
 
 **Krav på Python-skriptet**:
-* Använd `pyserial`-biblioteket för seriell kommunikation.
+* Använd den skapade UART-drivern för seriell kommunikation.
 * Implementera robust felhantering (t.ex. om porten inte kan öppnas).
 * Tillhandahåll hjälptext som beskriver tillgängliga kommandon.
 * Logga all kommunikation med timestamps för senare analys.
@@ -248,8 +253,7 @@ För att underlätta testning av seriell kommunikation och programflöde på ver
 **Krav på hårdvaruimplementation**:
 * Systemet måste modifieras för att lyssna på och svara på kommandon via den seriella porten.
 * Använd den seriella drivrutinens string-läsfunktionalitet för att ta emot kommandon.
-* Implementera en enkel kommandotolk som kan tolka inlästa textsträngar (t.ex. "LED_TOGGLE", "GET_TEMP").
-* Överväg att lägga till ett state där systemet väntar på kommandon istället för att köra autonomt.
+* Implementera en enkel kommandotolk som kan tolka inlästa tecken såsom beskrivet i L09.
 * Dokumentera vilka kommandon som stöds och deras förväntade svar.
 
 **Installation av pyserial**:
