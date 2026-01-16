@@ -10,6 +10,7 @@
 #include "driver/gpio/atmega328p.h"
 #include "utils/utils.h"
 
+
 #ifdef TESTSUITE
 
 namespace driver
@@ -83,6 +84,7 @@ constexpr void simulateToggle(GpioRegs& regs) noexcept
 void runOutputTest(const std::uint8_t id, GpioRegs& regs) noexcept
 {
     // Get the physical pin on the given port.
+    // Example: 
     const std::uint8_t pin{getPhysicalPin(id)};
 
     // Limit the scope of the GPIO instance.
@@ -90,23 +92,28 @@ void runOutputTest(const std::uint8_t id, GpioRegs& regs) noexcept
         // Create a new GPIO output.
         gpio::Atmega328p gpio{id, gpio::Direction::Output};
 
-        // Vi kollar pin-numret, ser vi något som är konstigt/suspekt?
-        std::printf("Pin number: %u, ATmega number: %u\n", pin, id);
+        //std::printf("Pin number: %u, ATMega nubmer: %u\n", pin, id);
 
         // Expect the instance to be initialized correctly if the pin is valid.
         const bool pinValid{isPinValid(id)};
         EXPECT_EQ(gpio.isInitialized(), pinValid);
-        
+
+        (void) pin;
+
         // Expect the GPIO to be set as output, i.e., the corresponding bit in DDRx should be set.
+        // Tips: Check that the pin is set with EXPECT_TRUE() and utils::read(regs.ddrx, pin).
         // Call utils::read, expect it to return true, since the bit in DDRx should be set.
-        // Otherwise the pin is not configured as output.
-        EXPECT_TRUE(utils::read(regs.ddrx, pin));
+        // otherwise the pin is not configured as output.
+        EXPECT_TRUE(utils::read(regs.ddrx,pin));
 
         // Set the output high, expect the corresponding bit in PORTx to be set.
+        // Tips: Use gpio.write() to set the output, read the bit with 
+        // utils::read(regs.portx, pin);
         gpio.write(true);
 
-        // Call utils::read, expect it to return true, since the bit in PORTx should be set.
-        // Otherwise the output is not high.
+        // Call utils::read, expect it to return true, since the bit in DDRx should be set.
+        // otherwise the pin is not configured as output.
+
         EXPECT_TRUE(utils::read(regs.portx, pin));
 
         // Set the output low, expect the corresponding bit in PORTx to be cleared.
@@ -137,22 +144,37 @@ void runOutputTest(const std::uint8_t id, GpioRegs& regs) noexcept
 void runInputTest(const std::uint8_t id, GpioRegs& regs) noexcept
 {
     // Get the physical pin on the given port.
+     const std::uint8_t pin{getPhysicalPin(id)};
 
     // Limit the scope of the GPIO instance.
-    {
+    {     
+        
         // Create a new GPIO input with internal pull-up resistor enabled.
+        gpio::Atmega328p gpio{id, gpio::Direction::InputPullup};
+
         // Expect the instance to be initialized correctly if the pin is valid.
+        const bool pinValid{isPinValid(id)};
+        EXPECT_EQ(gpio.isInitialized(), pinValid);
+        // (void) pin;
         
         // Expect the GPIO to be set as input, i.e., the corresponding bit in DDRx should be cleared.
+        EXPECT_FALSE(utils::read(regs.ddrx,pin));
 
         // Expect the internal pull-up resistor to be enabled, i.e., the corresponding bit in PORTx
         // should be set.
-
+        EXPECT_TRUE(utils::read(regs.portx,pin));
+        
         // Set the input high in PINx, expect the GPIO input to be high.
+        utils::set(regs.pinx, pin);
+        EXPECT_TRUE(gpio.read());
 
         // Set the input low in PINx, expect the GPIO input to be low.
+        utils::clear(regs.pinx, pin);
+        EXPECT_FALSE(gpio.read());
     }
     // Expect DDRx and PORTx to be cleared after the instance has been deleted.
+    EXPECT_FALSE(utils::read(regs.ddrx, pin));
+    EXPECT_FALSE(utils::read(regs.portx, pin));
 }
 
 /**
@@ -168,15 +190,21 @@ TEST(Gpio_Atmega328p, Initialization)
     for (std::uint8_t pin{}; pin < pinMax; ++pin)
     {
         // Create a new GPIO instance with the current pin number.
+        gpio::Atmega328p gpio{pin, gpio::Direction::Output};
         // Example: gpio::Atmega328p gpio{pin, gpio::Direction::Output};
 
         // Expect the instance to be initialized correctly if the pin is valid.
         // Tips: Check if the instance is initialized by invoking gpio.isInitialized().
         //       Check if the pin is valid by invoking isPinValid(pin).
         //       Use EXPECT_TRUE(), EXPECT_FALSE, and/or EXPECT_EQ to validate the functionality.
+        const bool pinValid{isPinValid(pin)};
+        EXPECT_EQ(gpio.isInitialized(), pinValid);
 
         // Create another GPIO instance on the same pin.
+        gpio::Atmega328p other{pin, gpio::Direction::Output};
+
         // Expect the instance to not be initialized, since the pin is already reserved.
+        EXPECT_FALSE(other.isInitialized());
     }
 }
 
@@ -239,6 +267,7 @@ TEST(Gpio_Atmega328p, Input)
 }
 } // namespace
 } // namespace driver
+
 
 #endif /** TESTSUITE */
 
