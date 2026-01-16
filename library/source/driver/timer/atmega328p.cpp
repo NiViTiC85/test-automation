@@ -88,7 +88,27 @@ void invokeCallback(const uint8_t timerIndex) noexcept
 // -----------------------------------------------------------------------------
 Atmega328p::Atmega328p(const uint32_t timeout_ms, void (*callback)(), 
                        const bool startTimer) noexcept
-    : myHw{Hardware::reserve()}
+	// Kolla gärna om timeout ms > 0. I så fall, kalla på Hardware::reserve() för att reservera
+	// en timerkrets. Annarsm sätt myHw till nullptr.
+	/*
+	int x = 3;
+	int y;
+
+	if (x == 3)
+	{
+		y = 5;
+	}
+	else
+	{
+		y = 10;
+	}
+
+	// Nedan är samma som ovan fast oneline.
+	int y = (x ==3) ? 5 = 10;
+	*/
+
+	// Is the timeout greater than 0? If true, try to reserve the hardware, else set it to nullptr (uninitialized).
+    : myHw{timeout_ms > 0U ? Hardware::reserve() : nullptr}
 	, myMaxCount{maxCount(timeout_ms)}
 	, myEnabled{false}
 {
@@ -101,6 +121,7 @@ Atmega328p::Atmega328p(const uint32_t timeout_ms, void (*callback)(),
 // -----------------------------------------------------------------------------
 Atmega328p::~Atmega328p() noexcept 
 { 
+	if(!isInitialized()) { return; }
 	removeCallback();
 	myTimers[myHw->index] = nullptr;
 	Hardware::release(myHw); 
