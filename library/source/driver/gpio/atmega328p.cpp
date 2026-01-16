@@ -137,12 +137,16 @@ Atmega328p::Atmega328p(const uint8_t pin, const Direction direction, void (*call
 // -----------------------------------------------------------------------------
 Atmega328p::~Atmega328p() noexcept 
 {   
-    // Free resources used for the GPIO before deletion.
-    enableInterrupt(false);
-    utils::clear(myHw->ddrx, myPin);
-    utils::clear(myHw->portx, myPin);
-    utils::clear(myPinRegistry, myId);
-    myHw = nullptr; 
+    // Only perform cleanup if there is anything to clean up.
+    if (isInitialized())
+    {
+        // Free resources used for the GPIO before deletion.
+        enableInterrupt(false);
+        utils::clear(myHw->ddrx, myPin);
+        utils::clear(myHw->portx, myPin);
+        utils::clear(myPinRegistry, myId);
+        myHw = nullptr; 
+    }
 }
 
 // -----------------------------------------------------------------------------
