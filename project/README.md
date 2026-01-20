@@ -426,18 +426,17 @@ make clean
 * Tillägg av enhetstester för angivna komponenter implementerade och fungerande.
 * Väl utformade stubklasser som korrekt simulerar hårdvarabeteende.
 * Komponenttester för logik-implementationen implementerade och fungerande.
-* Dokumentation av minst fem icke-automatiserbara tester.
+* Dokumentation av fem icke-automatiserbara tester.
 * Kod följer projektets stilguide.
 * Tester använder Google Test korrekt.
+* **Kortfattat:** Följ med under lektionerna och genomför lektionsuppgifterna.
 
 ### Väl Godkänd (VG)
 * Alla G-krav uppfyllda.
-* Minst fem nya tester för edge cases och felhantering.
+* Minst fem nya (egna) mjukvarutester för edge cases och felhantering.
 * Python-skript för seriell kommunikation implementerat enligt specifikationer och fungerande.
 * Användning av Python-skriptet för att automatisera flera integrationstest.
-* Komplett integrationstestdokumentation (minst tio tester).
-* Analys och reflektion kring testbarhet och förbättringar.
-* Parametriserade tester för att testa flera konfigurationer effektivt.
+* **Kortfattat:** Samma som för G, samt fem egna mjukvarutester och ett Python-skript.
 
 ## Inlämning
 
