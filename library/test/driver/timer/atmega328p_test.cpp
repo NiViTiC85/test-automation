@@ -185,7 +185,7 @@ TEST(Timer_Atmega328p, Callback)
     
     // Verify that callbackInvoked is true after timeout.
     EXPECT_TRUE (callbackInvoked);
-    
+
     // Note: handleCallback() increments the timer and invokes the callback when timeout is reached.
 }
 
@@ -196,17 +196,51 @@ TEST(Timer_Atmega328p, Callback)
  */
 TEST(Timer_Atmega328p, Restart)
 {
+    constexpr std::uint16_t timeout0{10U};
+
     //! @todo Test timer restart:
         // Reset the callback flag (callbackInvoked) using resetCallbackFlag().
+        resetCallbackFlag();
+
         // Create and start a timer with testCallback() as callback.
+        timer::Atmega328p timer0(timeout0, testCallback);
+        timer0.start();
+
         // Call handleCallback() enough times to almost reach the timeout (getMaxCount() - 1).
+        constexpr std::uint32_t maxCount0{getMaxCount(timeout0 - 1)};
+        for ( std::uint32_t i = 0 ; i < maxCount0 ; ++i )
+        {
+            timer0.handleCallback();
+        }
+
         // Verify that the callback flag (callbackInvoked) is still false.
+        EXPECT_FALSE (callbackInvoked);
+
         // Restart the timer.
+        timer0.restart();
+
         // Verify that the timer is still enabled after restart.
+        EXPECT_TRUE (timer0.isEnabled());
+
         // Call handleCallback() enough times to almost reach the timeout (getMaxCount() - 1).
+        for ( std::uint32_t i = 0 ; i < maxCount0 ; ++i )
+        {
+            timer0.handleCallback();
+        }
+
         // Verify that the callback flag (callbackInvoked) is still false, since the timer was restarted.
+        EXPECT_FALSE (callbackInvoked);
+
         // Call handleCallback() again to reach timeout.
+        constexpr std::uint32_t maxCount1{getMaxCount(timeout0)};
+        for ( std::uint32_t i = 0 ; i < maxCount1 ; ++i )
+        {
+            timer0.handleCallback();
+        }
+
         // Verify that the callback flag (callbackInvoked) is true due to timeout.
+        EXPECT_TRUE (callbackInvoked);
+
 }
 
 //! @todo Add more tests here (e.g., register verification, multiple timers running simultaneously).
