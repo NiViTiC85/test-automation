@@ -116,7 +116,7 @@ Atmega328p::Atmega328p(const uint32_t timeout_ms, void (*callback)(),
 	myTimers[myHw->index] = this;
 	addCallback(callback);
 	if (startTimer) { start(); }
-}
+}	
 
 // -----------------------------------------------------------------------------
 Atmega328p::~Atmega328p() noexcept 
@@ -148,7 +148,8 @@ uint32_t Atmega328p::timeout_ms() const noexcept
 // -----------------------------------------------------------------------------
 void Atmega328p::setTimeout_ms(const uint32_t timeout_ms) noexcept
 {
-    if (0U == timeout_ms) { stop(); }
+	// Ignore the user if they're stupied enough to send timeout_ms == 0.
+    if (0U == timeout_ms) { return; }
     myMaxCount = maxCount(timeout_ms);
 }
 
