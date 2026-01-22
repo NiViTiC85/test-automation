@@ -44,6 +44,13 @@ public:
      */
     int16_t read() const noexcept override { return myTemp; } 
 
+    /**
+     *  @brief Set new temperature value
+     * 
+     *  @return The new temperature in degrees Celsius.
+     */
+    void setTemperature(int16_t newTemp) const noexcept { newTemp = myTemp; }
+
     Stub(const Stub&)            = delete; // No copy constructor.
     Stub(Stub&&)                 = delete; // No move constructor.
     Stub& operator=(const Stub&) = delete; // No copy assignment.
