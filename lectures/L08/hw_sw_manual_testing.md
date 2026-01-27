@@ -17,7 +17,7 @@
 * The LED (LED1) shall start to flash.
 * Measure LED (LED1) flash speed by counting number of flashes over 10 secounds.
 * Get the frequensy (Hz) by deviding the number of flashes by ten (number of secounds).
-* Get the flash time intervall by devidding 1 with the fequensy.
+* Get the flash time intervall by devidding 1 with the fequency.
 * The intervall shall match two times the "toggleTimerTimeout" = 200 ms.
 
 ### 1.3 Verify Debounce Functionality
@@ -74,6 +74,8 @@
 
 ## 5. End-to-end scenario
 **OBS!** Interrupt-hantering och debounce-funktionalitet testas redan i sektionerna 2-3 ovan.
+
+### 5.1 End-to-end scenario
 
 Kör ett komplett scenario:
 1. Starta systemet från reset.

@@ -97,10 +97,19 @@ void Logic::run(const bool& stop) noexcept
     // Run the system continuously.
     mySerial.printf("Running the system!\n");
 
+    // Print info about transmitting commnds.
+    mySerial.printf("Please enter one of the following commands:n");
+    mySerial.printf("- 't' to goggle the toggle timer \n");
+    mySerial.printf("- 'r' to read the temperature \n");
+    mySerial.printf("- 's' to print the toggle timer status\n");
+
     while (!stop) 
     { 
         // Regularly reset the watchdog to avoid system reset.
         myWatchdog.reset(); 
+
+        // Read serial port, execute received commands.
+        readSerialPort();
     }
 }
 
@@ -203,4 +212,74 @@ void Logic::restoreToggleStateFromEeprom() noexcept
         mySerial.printf("Toggle timer enabled!\n");
     }
 }
+
+// -----------------------------------------------------------------------------
+bool Logic::readSerialPort() noexcept
+{
+    // Buffersize = 5 bytes
+    constexpr uint16_t bufferSize{5U};
+
+    // Read timeout in ms.
+    constexpr uint16_t readTimeout_ms{100U};
+
+    // Read buffer (to recive data as bytes).
+    uint8_t buffer [bufferSize]{};
+
+    // Read the serial port, terminate the function on failure.
+    const int16_t bytesRead{mySerial.read(buffer, bufferSize, readTimeout_ms)};
+
+    // Check the return value, return false if the operation failed.
+    if (0 > bytesRead)
+    {
+        mySerial.printf("Failed to recive data from the serial port!\n");
+        return false;
+    }
+
+    // Handle command if we recived data.
+    if ( 0 < bytesRead)
+    {
+        // Placeholder: Print tge number of received bytes.
+        mySerial.printf("Recived %d bytes from the serial port!\n", bytesRead);
+
+        // Print the recived command.
+        const char cmd{static_cast<char>(buffer[0U])};
+
+        // Handle received command
+        switch (cmd)
+        {
+            // if we received command 't', toggle the toggleTimer
+            case 't':
+            {
+                // Simulate toggle button pressed
+                handleToggleButtonPressed();
+                break;
+            }
+            // if we received command 'r', read the remperature
+            case 'r':
+            {
+                handleTempButtonPressed();
+                break;
+            }
+
+            // if we received command 's', print the toggle timer status
+            case 's':
+            {
+                const char* state{myToggleTimer.isEnabled() ? "enabled" : "disabled"};
+                mySerial.printf("The toggle timer is %s!n", state);
+                break;
+            }
+
+            // Print error messafe if an unknown command was entered
+            default:
+            {
+                mySerial.printf("Unknown command %c!n", cmd);
+                return false;
+            }
+        }
+
+    }
+    // Return true to indicate success.
+    return true;
+}
+
 } // namespace logic
