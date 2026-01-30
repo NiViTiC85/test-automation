@@ -77,15 +77,15 @@
 
 ### 5.1 End-to-end scenario
 
-Kör ett komplett scenario:
-1. Starta systemet från reset.
-2. Tryck på toggle-knappen (sw1) → lysdioden (led1) ska blinka.
-3. Tryck på temperaturknappen (sw2) → temperatur ska skrivas ut i terminalen.
-4. Vänta på automatisk temperaturavläsning (60 sekunder).
-5. Tryck på toggle-knappen (sw1) igen → lysdioden (led1) ska sluta blinka.
-6. Tryck på toggle-knappen (sw1) igen → lysdioden (led1) ska börja blinka.
-7. Resetta systemet och verifiera att toggle-tillståndet är aktivt vid start, dvs. lysdioden (led1) ska börja blinka efter omstart.
-8. Tryck på toggle-knappen (sw1) igen → lysdioden (led1) ska sluta blinka.
-9. Resetta systemet och verifiera att toggle-tillståndet är inaktivt vid start, dvs. lysdioden (led1) ska vara släckt efter omstart.
+Run a complete scenario:
+1. Boot the system from reset.
+2. Press the toggle button (sw1) → the LED (led1) should flash.
+3. Press the temperature button (sw2) → the temperature should be printed in the terminal.
+4. Wait for automatic temperature reading (60 seconds).
+5. Press the toggle button (sw1) again → the LED (led1) should stop flashing.
+6. Press the toggle button (sw1) again → the LED (led1) should start flashing.
+7. Reset the system and verify that the toggle state is active at startup, i.e. the LED (led1) should start flashing after reboot.
+8. Press the toggle button (sw1) again → the LED (led1) should stop flashing.
+9. Reset the system and verify that the toggle state is inactive at startup, i.e. The LED (LED1) should be off after restart.
 
 --------------------------------------------------------------------------------
