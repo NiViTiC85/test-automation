@@ -238,9 +238,6 @@ bool Logic::readSerialPort() noexcept
     // Handle command if we recived data.
     if ( 0 < bytesRead)
     {
-        // Placeholder: Print tge number of received bytes.
-        mySerial.printf("Recived %d bytes from the serial port!\n", bytesRead);
-
         // Print the recived command.
         const char cmd{static_cast<char>(buffer[0U])};
 
