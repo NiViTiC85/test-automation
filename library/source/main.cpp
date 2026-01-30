@@ -98,9 +98,9 @@ int main()
 {
     // Set pin numbers.
     constexpr uint8_t tempSensorPin{2U};
-    constexpr uint8_t ledPin{8U};
-    constexpr uint8_t toggleButtonPin{12U};
-    constexpr uint8_t tempButtonPin{13U};
+    constexpr uint8_t ledPin{5U};
+    constexpr uint8_t toggleButtonPin{4U};
+    constexpr uint8_t tempButtonPin{7U};
 
     // Set timeouts.
     constexpr uint32_t debounceTimerTimeout{300U};
