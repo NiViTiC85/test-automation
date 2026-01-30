@@ -98,9 +98,9 @@ void Logic::run(const bool& stop) noexcept
     mySerial.printf("Running the system!\n");
 
     // Print info about transmitting commnds.
-    mySerial.printf("Please enter one of the following commands:n");
-    mySerial.printf("- 't' to goggle the toggle timer \n");
-    mySerial.printf("- 'r' to read the temperature \n");
+    mySerial.printf("Please enter one of the following commands:\n");
+    mySerial.printf("- 't' to goggle the toggle timer\n");
+    mySerial.printf("- 'r' to read the temperature\n");
     mySerial.printf("- 's' to print the toggle timer status\n");
 
     while (!stop) 
@@ -265,14 +265,14 @@ bool Logic::readSerialPort() noexcept
             case 's':
             {
                 const char* state{myToggleTimer.isEnabled() ? "enabled" : "disabled"};
-                mySerial.printf("The toggle timer is %s!n", state);
+                mySerial.printf("The toggle timer is %s!\n", state);
                 break;
             }
 
             // Print error messafe if an unknown command was entered
             default:
             {
-                mySerial.printf("Unknown command %c!n", cmd);
+                mySerial.printf("Unknown command %c!\n", cmd);
                 return false;
             }
         }

@@ -145,7 +145,6 @@ protected:
     virtual void writeToggleStateToEeprom(bool enable) noexcept;
     virtual bool readToggleStateFromEeprom() const noexcept;
     virtual void printTemperature() noexcept;
-    virtual bool readSerialPort() noexcept;
 
 private:
     void handleToggleButtonPressed() noexcept;
